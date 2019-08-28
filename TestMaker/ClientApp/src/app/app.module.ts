@@ -11,6 +11,9 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { QuizComponent } from './quiz/quiz.component';
 import { QuizListComponent } from './quiz/quiz-list.component';
+import { AboutComponent } from './about/about.component';
+import { LoginComponent } from './login/login.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +22,10 @@ import { QuizListComponent } from './quiz/quiz-list.component';
     CounterComponent,
     FetchDataComponent,
     QuizComponent,
-    QuizListComponent
+    QuizListComponent,
+    AboutComponent,
+    LoginComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,6 +36,9 @@ import { QuizListComponent } from './quiz/quiz-list.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'quiz/:id', component: QuizComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'login', component: LoginComponent },
+      { path: '**', component: PagenotfoundComponent },
     ])
   ],
   providers: [],
