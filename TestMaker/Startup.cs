@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TestMaker.Data;
 
 namespace TestMaker
 {
@@ -27,10 +29,17 @@ namespace TestMaker
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            // Add EntityFramework support for SqlServer.
+            services.AddEntityFrameworkSqlServer();
+            // Add ApplicationDbContext.
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +62,16 @@ namespace TestMaker
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
+
+
+            // Create a service scope to get an ApplicationDbContext instance using DI
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                // Create the Db if it doesn't exist and applies any pending migration.
+                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                // Seed the Db.
+                DbSeeder.Seed(serviceScope.ServiceProvider.GetService<ApplicationDbContext>());
+            }
 
             app.UseSpa(spa =>
             {
