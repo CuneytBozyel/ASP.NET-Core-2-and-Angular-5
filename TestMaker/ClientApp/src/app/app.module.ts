@@ -14,6 +14,7 @@ import { QuizListComponent } from './quiz/quiz-list.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { QuizEditComponent } from './quiz/quiz-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +24,7 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
     FetchDataComponent,
     QuizComponent,
     QuizListComponent,
+    QuizEditComponent,
     AboutComponent,
     LoginComponent,
     PagenotfoundComponent
@@ -32,13 +34,14 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent },
+      { path: 'quiz/create', component: QuizEditComponent },
+      { path: 'quiz/edit/:id', component: QuizEditComponent },
       { path: 'quiz/:id', component: QuizComponent },
       { path: 'about', component: AboutComponent },
       { path: 'login', component: LoginComponent },
-      { path: '**', component: PagenotfoundComponent },
+      { path: '**', component: PagenotfoundComponent }
     ])
   ],
   providers: [],
